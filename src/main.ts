@@ -1,27 +1,27 @@
 import './style.css'
 
-import { basicSetup } from "codemirror"
-import { EditorView } from "@codemirror/view"
+import { basicSetup } from "codemirror";
+import { EditorView } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
 import linkedRecords from './lr_client';
 import { LongTextAttribute } from 'linkedrecords/browser_sdk';
 import bind from './bindCM2LR';
 
 const setupTermsProm = linkedRecords.Fact.createAll([
-  ['CMDoc', '$isATermFor', 'a document'],
+  ['PlainTextFile', '$isATermFor', 'a document'],
 ]);
 
 async function findOrCreateDocument(): Promise<LongTextAttribute> {
   const { docs } = await linkedRecords.Attribute.findAll({
     docs: [
       ['$hasDataType', LongTextAttribute],
-      ['isA', 'CMDoc'],
+      ['isA', 'PlainTextFile'],
     ],
   });
 
   return docs.length
     ? docs[0]
-    : await linkedRecords.Attribute.createLongText('the content', [['isA', 'CMDoc']]);
+    : await linkedRecords.Attribute.createLongText('the content', [['isA', 'PlainTextFile']]);
 }
 
 async function initEditor() {
