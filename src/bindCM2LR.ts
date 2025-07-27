@@ -58,9 +58,11 @@ export default function bind(view: EditorView, lrAttribute: LongTextAttribute) {
     ])
   });
 
-  lrAttribute.subscribe(async (change: any) => {
-    if (view.state.doc.toString() !== await lrAttribute.getValue()) {
-      applyChangeset(change.changeset, view);
+  lrAttribute.subscribe(async (change: any, changeInfo: any) => {
+    if(!changeInfo) {
+      return;
     }
+
+    applyChangeset(change.changeset, view);
   });
 }

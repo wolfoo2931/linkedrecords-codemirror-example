@@ -4,16 +4,17 @@ import { basicSetup } from "codemirror"
 import { EditorView } from "@codemirror/view"
 import { EditorState } from "@codemirror/state";
 import linkedRecords from './lr_client';
-import type { LongTextAttribute } from 'linkedrecords/browser_sdk';
+import { LongTextAttribute } from 'linkedrecords/browser_sdk';
 import bind from './bindCM2LR';
 
 const setupTermsProm = linkedRecords.Fact.createAll([
   ['CMDoc', '$isATermFor', 'a document'],
 ]);
 
-async function findOrCreateDocument() {
+async function findOrCreateDocument(): Promise<LongTextAttribute> {
   const { docs } = await linkedRecords.Attribute.findAll({
     docs: [
+      ['$hasDataType', LongTextAttribute],
       ['isA', 'CMDoc'],
     ],
   });
@@ -36,7 +37,7 @@ async function initEditor() {
     extensions: [ basicSetup ],
   });
 
-  bind(view, doc as LongTextAttribute);
+  bind(view, doc);
 }
 
 setupTermsProm.then(initEditor);
