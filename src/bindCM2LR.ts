@@ -21,6 +21,7 @@ function applyChangeset(cs: any, view: EditorView) {
         to: index + op.length,
         insert: ""
       });
+      // Only advance index for deleted text (since the source text is being removed)
       index += op.length;
       remPtr += op.length;
     } else if (symbol === '+') {
@@ -30,7 +31,7 @@ function applyChangeset(cs: any, view: EditorView) {
         to: index,
         insert: insText
       });
-      index += op.length;
+      // DO NOT advance `index` — this is key!
       addPtr += op.length;
     }
   }
