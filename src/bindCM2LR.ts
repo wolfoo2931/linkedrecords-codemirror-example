@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Changeset } from 'changesets';
 import { EditorView } from "codemirror";
 import { LongTextChange, type LongTextAttribute } from "linkedrecords/browser_sdk";

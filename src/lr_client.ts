@@ -18,7 +18,7 @@ linkedRecords.setUnknownServerErrorHandler(() => {
 linkedRecords.setLoginHandler(() => {
   // const needsVerification = window.location.search.includes('email-not-verified');
 
-  alert('go to: http://localhost:6543/login')
+  alert('go to: http://localhost:3001/login')
 });
 
 export default linkedRecords;
