@@ -1,24 +1,29 @@
 import LinkedRecords from 'linkedrecords/browser_sdk';
 
-const linkedRecords: LinkedRecords = new LinkedRecords(new URL('http://localhost:6543'));
+const oidcConfig = {
+  redirect_uri: window.location.origin + '/callback',
+};
+
+const linkedRecords: LinkedRecords = new LinkedRecords(new URL('https://us1.api.linkedrecords.com'), oidcConfig);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (window as unknown as any).lr = linkedRecords;
 
 linkedRecords.setConnectionLostHandler((error: any) => {
-  console.log('linkedRecords connection lost error:', error);
+  console.error('linkedRecords connection lost error:', error);
 
-  alert('You seem to have a connection problem. Check Your Wifi!')
+  // alert('You seem to have a connection problem. Check Your Wifi!')
 })
 
 linkedRecords.setUnknownServerErrorHandler(() => {
-  alert('server error')
+  console.error('server error')
+  // alert('server error')
 })
 
 linkedRecords.setLoginHandler(() => {
   // const needsVerification = window.location.search.includes('email-not-verified');
-
-  alert('go to: http://localhost:3001/login')
+  console.log('redirect to login')
+  // linkedRecords.login();
 });
 
 export default linkedRecords;

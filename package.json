@@ -13,7 +13,7 @@
     "vite": "^7.0.4"
   },
   "dependencies": {
-    "linkedrecords": "git+ssh://git@github.com/wolfoo2931/linkedrecords#2201740f287c86b10c330b1c1be80930f30f7be2",
+    "linkedrecords": "git+ssh://git@github.com/wolfoo2931/linkedrecords#3c5171b4cdf2331e272c331fe3627d3d1314485e",
     "@codemirror/view": "^6.38.1",
     "codemirror": "^6.0.2",
     "changesets": "https://github.com/wolfoo2931/changesets#77f814381280ca067c45fe7ff1e8aabe892d13a5"

@@ -7,10 +7,6 @@ import linkedRecords from './lr_client';
 import { LongTextAttribute } from 'linkedrecords/browser_sdk';
 import bind from './bindCM2LR';
 
-const setupTermsProm = linkedRecords.Fact.createAll([
-  ['PlainTextFile', '$isATermFor', 'a document'],
-]);
-
 async function findOrCreateDocument(): Promise<LongTextAttribute> {
   const { docs } = await linkedRecords.Attribute.findAll({
     docs: [
@@ -40,4 +36,17 @@ async function initEditor() {
   bind(view, doc);
 }
 
-setupTermsProm.then(initEditor);
+linkedRecords.isAuthenticated().then(async (isAuthenticated) => {
+  console.log('isAuthenticated', isAuthenticated)
+
+  if (!isAuthenticated) {
+    await linkedRecords.login();
+  }
+
+  await linkedRecords.Fact.createAll([
+    ['PlainTextFile', '$isATermFor', 'a document'],
+  ]);
+
+
+  await initEditor();
+});
