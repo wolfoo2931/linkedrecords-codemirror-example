@@ -3,12 +3,13 @@ import './style.css'
 import { basicSetup } from "codemirror";
 import { EditorView } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
-import linkedRecords from './lr_client';
-import { LongTextAttribute } from 'linkedrecords/browser_sdk';
+import LinkedRecords, { LongTextAttribute } from 'linkedrecords/browser_sdk';
 import bind from './bindCM2LR';
 
+const lr = LinkedRecords.getPublicClient('https://us1.api.linkedrecords.com');
+
 async function findOrCreateDocument(): Promise<LongTextAttribute> {
-  const { docs } = await linkedRecords.Attribute.findAll({
+  const { docs } = await lr.Attribute.findAll({
     docs: [
       ['$hasDataType', LongTextAttribute],
       ['isA', 'PlainTextFile'],
@@ -17,11 +18,10 @@ async function findOrCreateDocument(): Promise<LongTextAttribute> {
 
   return docs.length
     ? docs[0]
-    : await linkedRecords.Attribute.createLongText('the content', [['isA', 'PlainTextFile']]);
+    : lr.Attribute.createLongText('the content', [['isA', 'PlainTextFile']]);
 }
 
-async function initEditor() {
-  const doc = await findOrCreateDocument();
+async function initEditor(doc: LongTextAttribute) {
   const state = EditorState.create({
     doc: await doc.getValue(),
     extensions: [ basicSetup ]
@@ -36,17 +36,17 @@ async function initEditor() {
   bind(view, doc);
 }
 
-linkedRecords.isAuthenticated().then(async (isAuthenticated) => {
+lr.isAuthenticated().then(async (isAuthenticated) => {
   console.log('isAuthenticated', isAuthenticated)
 
   if (!isAuthenticated) {
-    await linkedRecords.login();
+    await lr.login();
   }
 
-  await linkedRecords.Fact.createAll([
-    ['PlainTextFile', '$isATermFor', 'a document'],
+  await lr.Fact.createAll([
+    ['PlainTextFile', '$isATermFor', 'a string which contains plain text (Markdown)'],
   ]);
 
-
-  await initEditor();
+  const doc = await findOrCreateDocument();
+  await initEditor(doc);
 });
